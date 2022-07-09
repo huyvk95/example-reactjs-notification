@@ -23,23 +23,15 @@ const handleSubscription = (req, res) => {
   const { data } = req.body;
   const id = createHash(JSON.stringify(data));
   subscriptions[id] = data;
-  req.status(201).json({ id });
+  res.status(201).json({ id });
 };
 
 const handlePushNotification = (req, res) => {
+  const { data } = req.body;
   const id = req.params.id;
   const subscription = subscriptions[id];
   webpush
-    .sendNotification(
-      subscription,
-      JSON.stringify({
-        title: "New Product Available",
-        text: "HEY! Take a look at this brand new t-shirt!",
-        image: "/images/noti-img.jpg",
-        tag: "new-product",
-        url: "/new-product.html",
-      })
-    )
+    .sendNotification(subscription, JSON.stringify(data))
     .catch((err) => console.log(err));
 
   res.status(202).json({});

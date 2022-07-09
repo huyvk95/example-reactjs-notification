@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"cd be && yarn start\" \"cd fe && yarn serve\"",
+    "start": "concurrently \"yarn start:be\" \"start:fe\"",
+    "start:be": "cd be && BE_PORT=4000 PRIVATE_KEY=bdSiNzUhUP6piAxLH-tW88zfBlWWveIx0dAsDO66aVU PUBLIC_KEY=BIN2Jc5Vmkmy-S3AUrcMlpKxJpLeVRAfu9WBqUbJ70SJOCWGCGXKY-Xzyh7HDr6KbRDGYHjqZ06OcS3BjD7uAm8 yarn start",
+    "start:fe": "cd fe && yarn serve",
+    "build:fe": "cd fe && REACT_APP_BE_PORT=4000 REACT_APP_PRIVATE_KEY=bdSiNzUhUP6piAxLH-tW88zfBlWWveIx0dAsDO66aVU REACT_APP_PUBLIC_KEY=BIN2Jc5Vmkmy-S3AUrcMlpKxJpLeVRAfu9WBqUbJ70SJOCWGCGXKY-Xzyh7HDr6KbRDGYHjqZ06OcS3BjD7uAm8 yarn build",
+    "dev:fe": "cd fe && REACT_APP_BE_PORT=4000 REACT_APP_PRIVATE_KEY=bdSiNzUhUP6piAxLH-tW88zfBlWWveIx0dAsDO66aVU REACT_APP_PUBLIC_KEY=BIN2Jc5Vmkmy-S3AUrcMlpKxJpLeVRAfu9WBqUbJ70SJOCWGCGXKY-Xzyh7HDr6KbRDGYHjqZ06OcS3BjD7uAm8 yarn start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

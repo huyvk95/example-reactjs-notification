@@ -5,7 +5,7 @@ const app = express();
 
 const controller = require("./controller");
 
-const port = process.env.PORT || 4000;
+const port = process.env.BE_PORT || 4000;
 
 app.use(
   cors({

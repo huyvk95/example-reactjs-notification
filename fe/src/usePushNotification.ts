@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import * as serviceWorker from "./service-worker";
-
-const isSupported = serviceWorker.isPushNotificationSupported();
 
 export const usePushNotification = () => {
+  const isSupported = "serviceWorker" in navigator && "PushManager" in window;
   const [subscription, setSubscription] = useState<PushSubscription | null>(
     null
   );
@@ -35,7 +33,9 @@ export const usePushNotification = () => {
         if (subscriptionId) {
           setSubscriptionId(subscriptionId);
         } else {
-          const subscription = await serviceWorker.getUserSubscription();
+          const serviceWorker = await navigator.serviceWorker.ready;
+          const subscription =
+            await serviceWorker.pushManager.getSubscription();
           await fetchSubscriptionId(subscription);
         }
       } catch (error) {
@@ -50,7 +50,7 @@ export const usePushNotification = () => {
     try {
       setLoading(true);
       setError(null);
-      const permission = await serviceWorker.askUserPermission();
+      const permission = await Notification.requestPermission();
       setConsent(permission);
       if (permission !== "granted")
         throw new Error("You denied the consent to receive notifications");
@@ -65,7 +65,11 @@ export const usePushNotification = () => {
     try {
       setLoading(true);
       setError(null);
-      const subscription = await serviceWorker.createNotificationSubscription();
+      const serviceWorker = await navigator.serviceWorker.ready;
+      const subscription = await serviceWorker.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: process.env.REACT_APP_PUBLIC_KEY,
+      });
       setSubscription(subscription);
     } catch (error) {
       setError(error);
